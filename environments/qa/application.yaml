@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: django-app-prod
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/jcloudcodes/django-jupiter-starts.git
+    targetRevision: main
+    path: django-app
+    helm:
+      valueFiles:
+        - values.yaml
+        - environments/prod/values.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: django-prod
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
