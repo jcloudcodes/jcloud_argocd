@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: nexus.jcloudcodes.com/django-jupiter
-  tag: "32"
+  tag: "34"
 
 env:
   DJANGO_DEBUG: "1"
