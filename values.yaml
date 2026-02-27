@@ -1,0 +1,77 @@
+nameOverride: ""
+fullnameOverride: ""
+
+replicaCount: 2
+
+image:
+  repository: nexus.jcloudcodes.com/django-jupiter
+  tag: "1"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+# - name: nexus-regcred
+
+serviceAccount:
+  create: false
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+service:
+  type: ClusterIP
+  port: 8000
+
+containerPort: 8000
+
+resources: {}
+# limits:
+#   cpu: 500m
+#   memory: 512Mi
+# requests:
+#   cpu: 100m
+#   memory: 256Mi
+
+env:
+  DJANGO_SETTINGS_MODULE: "nasa_world.settings"
+  DJANGO_DEBUG: "0"
+  # SECRET_KEY should be in secret
+
+config:
+  allowedHosts: "django.jcloudcodes.com,localhost,127.0.0.1"
+
+secret:
+  # Base64 NOT required here (Helm will render as stringData)
+  djangoSecretKey: "change-me"
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations: {}
+  host: django.jcloudcodes.com
+  path: /
+  tls:
+    enabled: false
+    secretName: ""
+
+postgres:
+  enabled: true
+
+  image:
+    repository: postgres
+    tag: "15-alpine"
+    pullPolicy: IfNotPresent
+
+  service:
+    port: 5432
+
+  persistence:
+    enabled: true
+    storageClassName: ""
+    accessModes: ["ReadWriteOnce"]
+    size: 10Gi
+
+  auth:
+    database: django
+    username: django
+    password: "change-me"

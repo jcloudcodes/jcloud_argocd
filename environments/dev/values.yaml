@@ -1,0 +1,16 @@
+replicaCount: 1
+
+image:
+  repository: nexus.jcloudcodes.com/django-jupiter
+  tag: "dev"
+
+env:
+  DJANGO_DEBUG: "1"
+
+ingress:
+  host: dev-django.jcloudcodes.com
+
+postgres:
+  enabled: true
+  auth:
+    password: "dev-password-change-me"

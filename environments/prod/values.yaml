@@ -1,0 +1,19 @@
+replicaCount: 3
+
+image:
+  repository: nexus.jcloudcodes.com/django-jupiter
+  tag: "prod"
+
+env:
+  DJANGO_DEBUG: "0"
+
+ingress:
+  host: django.jcloudcodes.com
+  tls:
+    enabled: true
+    secretName: "django-tls"
+
+postgres:
+  enabled: true
+  auth:
+    password: "prod-password-change-me"
