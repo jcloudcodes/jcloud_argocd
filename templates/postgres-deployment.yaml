@@ -22,21 +22,42 @@ spec:
           image: "{{ .Values.postgres.image.repository }}:{{ .Values.postgres.image.tag }}"
           imagePullPolicy: {{ .Values.postgres.image.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.postgres.service.port }}
+            - name: postgres
+              containerPort: {{ .Values.postgres.service.port }}
+
           env:
             - name: POSTGRES_DB
               value: {{ .Values.postgres.auth.database | quote }}
             - name: POSTGRES_USER
               value: {{ .Values.postgres.auth.username | quote }}
+
+            # Use Secret for password (do NOT store plain text in values for GitOps)
             - name: POSTGRES_PASSWORD
-              value: {{ .Values.postgres.auth.password | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "django-app.fullname" . }}-secret
+                  key: POSTGRES_PASSWORD
             - name: PGDATA
-              value: /var/lib/postgresql/data/pgdata
+              value: {{ .Values.postgres.persistence.pgdata | default "/var/lib/postgresql/data/pgdata" | quote }}
+
+          readinessProbe:
+            tcpSocket:
+              port: postgres
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
+          livenessProbe:
+            tcpSocket:
+              port: postgres
+            initialDelaySeconds: 15
+            periodSeconds: 10
+
           volumeMounts:
             {{- if .Values.postgres.persistence.enabled }}
             - name: data
               mountPath: /var/lib/postgresql/data
             {{- end }}
+
       volumes:
         {{- if .Values.postgres.persistence.enabled }}
         - name: data

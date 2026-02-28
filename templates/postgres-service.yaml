@@ -7,11 +7,11 @@ metadata:
     {{- include "django-app.labels" . | nindent 4 }}
 spec:
   type: ClusterIP
-  selector:
-    app.kubernetes.io/component: postgres
-    {{- include "django-app.selectorLabels" . | nindent 4 }}
   ports:
     - name: postgres
       port: {{ .Values.postgres.service.port }}
-      targetPort: {{ .Values.postgres.service.port }}
+      targetPort: postgres
+  selector:
+    app.kubernetes.io/component: postgres
+    {{- include "django-app.selectorLabels" . | nindent 4 }}
 {{- end }}

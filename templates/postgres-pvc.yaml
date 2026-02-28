@@ -7,11 +7,11 @@ metadata:
     {{- include "django-app.labels" . | nindent 4 }}
 spec:
   accessModes:
-    {{- toYaml .Values.postgres.persistence.accessModes | nindent 4 }}
+    - ReadWriteOnce
+  {{- if .Values.postgres.persistence.storageClass }}
+  storageClassName: {{ .Values.postgres.persistence.storageClass | quote }}
+  {{- end }}
   resources:
     requests:
-      storage: {{ .Values.postgres.persistence.size | quote }}
-  {{- if .Values.postgres.persistence.storageClassName }}
-  storageClassName: {{ .Values.postgres.persistence.storageClassName | quote }}
-  {{- end }}
+      storage: {{ .Values.postgres.persistence.size | default "10Gi" | quote }}
 {{- end }}

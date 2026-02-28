@@ -5,10 +5,10 @@ metadata:
   labels:
     {{- include "django-app.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
-  selector:
-    {{- include "django-app.selectorLabels" . | nindent 4 }}
+  type: {{ .Values.service.type | default "ClusterIP" }}
   ports:
     - name: http
-      port: {{ .Values.service.port }}
+      port: {{ .Values.service.port | default 8000 }}
       targetPort: http
+  selector:
+    {{- include "django-app.selectorLabels" . | nindent 4 }}
