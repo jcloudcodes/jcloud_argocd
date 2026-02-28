@@ -30,6 +30,8 @@ spec:
               value: {{ .Values.postgres.auth.username | quote }}
             - name: POSTGRES_PASSWORD
               value: {{ .Values.postgres.auth.password | quote }}
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
           volumeMounts:
             {{- if .Values.postgres.persistence.enabled }}
             - name: data
