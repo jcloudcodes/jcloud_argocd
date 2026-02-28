@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: jcloudcodes/django-starts-jupiters-ig
-  tag: "40"
+  tag: "41"
 
 env:
   DJANGO_DEBUG: "1"
