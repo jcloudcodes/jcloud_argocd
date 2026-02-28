@@ -4,7 +4,7 @@ fullnameOverride: ""
 replicaCount: 2
 
 image:
-  repository: nexus.jcloudcodes.com/django-jupiter
+  repository: jcloudcodes/django-starts-jupiters-ig
   tag: "1"
   pullPolicy: IfNotPresent
 

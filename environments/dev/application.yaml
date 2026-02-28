@@ -2,14 +2,14 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: django-app-dev
-  namespace: argocd
+  namespace: django-dev
 spec:
   project: default
 
   source:
-    repoURL: https://github.com/jcloudcodes/django-jupiter-starts.git
+    repoURL: https://github.com/jcloudcodes/jcloud_argocd.git
     targetRevision: main
-    path: django-app
+    path: .
     helm:
       valueFiles:
         - values.yaml

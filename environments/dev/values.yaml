@@ -1,8 +1,13 @@
 replicaCount: 1
 
 image:
+<<<<<<< HEAD
   repository: nexus.jcloudcodes.com/django-jupiter
   tag: "36"
+=======
+  repository: jcloudcodes/django-starts-jupiters-ig
+  tag: "dev"
+>>>>>>> fcc0308 (push)
 
 env:
   DJANGO_DEBUG: "1"
@@ -13,4 +18,4 @@ ingress:
 postgres:
   enabled: true
   auth:
-    password: "dev-password-change-me"
+    password: "baba12345@"
