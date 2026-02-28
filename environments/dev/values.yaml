@@ -2,15 +2,57 @@ replicaCount: 1
 
 image:
   repository: jcloudcodes/django-starts-jupiters-ig
-  tag: "41"
+  tag: "dev"
+  pullPolicy: IfNotPresent
+
+containerPort: 8000
 
 env:
+  DJANGO_SETTINGS_MODULE: "nasa_world.settings"
   DJANGO_DEBUG: "1"
 
+config:
+  allowedHosts: "django.jcloudcodes.com,localhost,127.0.0.1"
+
 ingress:
-  host: dev-django.jcloudcodes.com
+  enabled: true
+  className: nginx
+  host: django.jcloudcodes.com
+  path: /
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "20m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+
+service:
+  type: ClusterIP
+  port: 8000
+
+# 🔐 Secrets (used by templates/secret.yaml)
+secret:
+  djangoSecretKey: "change-me"        # move to ExternalSecret/SealedSecret later
+  dbPassword: "baba12345@"
+  postgresPassword: "baba12345@"
 
 postgres:
   enabled: true
+
+  image:
+    repository: postgres
+    tag: "15-alpine"
+    pullPolicy: IfNotPresent
+
+  service:
+    port: 5432
+
   auth:
-    password: "baba12345@"
+    database: django
+    username: django
+    # password comes from Secret (POSTGRES_PASSWORD)
+
+  persistence:
+    enabled: true
+    size: 10Gi
+    storageClass: standard-rwo
+    # ✅ critical fix for GKE PVC (lost+found issue)
+    pgdata: /var/lib/postgresql/data/pgdata
