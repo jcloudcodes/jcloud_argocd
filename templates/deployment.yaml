@@ -4,15 +4,18 @@ metadata:
   name: {{ include "django-app.fullname" . }}
   labels:
     {{- include "django-app.labels" . | nindent 4 }}
+    app.kubernetes.io/component: web
 spec:
   replicas: {{ .Values.replicaCount | default 1 }}
   selector:
     matchLabels:
       {{- include "django-app.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: web
   template:
     metadata:
       labels:
         {{- include "django-app.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: web
     spec:
       {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -35,7 +38,8 @@ spec:
       containers:
         - name: django
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "IfNotPresent" }}
+
           ports:
             - name: http
               containerPort: {{ .Values.containerPort | default 8000 }}

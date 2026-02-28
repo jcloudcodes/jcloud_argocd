@@ -12,3 +12,4 @@ spec:
       targetPort: http
   selector:
     {{- include "django-app.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: web
