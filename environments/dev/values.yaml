@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: jcloudcodes/django-starts-jupiters-ig
-  tag: "52"
+  tag: "dev"
   pullPolicy: IfNotPresent
 
 containerPort: 8000
